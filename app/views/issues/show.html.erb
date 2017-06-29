@@ -28,7 +28,7 @@
 <div class="issue__topbar">
   <%= avatar(@issue.author, :size => "80") %>
 
-  <h2><%= issue_heading(@issue) %> <%= render_issue_subject_healine(@issue) %></h2>
+  <h2><b><%= issue_heading(@issue) %></b> <%= render_issue_subject_healine(@issue) %></h2>
 
   <p class="author">
   <%= authoring @issue.created_on, @issue.author %>.
