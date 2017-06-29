@@ -1,6 +1,10 @@
 <%= render :partial => 'action_menu' %>
 
-<h2><%= issue_heading(@issue) %></h2>
+
+  <div class="subject">
+    <%= render_issue_tree(@issue) %>
+  </div>
+
 
 <div class="<%= @issue.css_classes %> details">
   <% if @prev_issue_id || @next_issue_id %>
@@ -21,18 +25,19 @@
     </div>
   <% end %>
 
-  <%= avatar(@issue.author, :size => "50") %>
+<div class="issue__topbar">
+  <%= avatar(@issue.author, :size => "80") %>
 
-<div class="subject">
-<%= render_issue_subject_with_tree(@issue) %>
+  <h2><%= issue_heading(@issue) %> <%= render_issue_subject_healine(@issue) %></h2>
+
+  <p class="author">
+  <%= authoring @issue.created_on, @issue.author %>.
+  <% if @issue.created_on != @issue.updated_on %>
+  <%= l(:label_updated_time, time_tag(@issue.updated_on)).html_safe %>.
+  <% end %>
+  </p>
 </div>
-        <p class="author">
-        <%= authoring @issue.created_on, @issue.author %>.
-        <% if @issue.created_on != @issue.updated_on %>
-        <%= l(:label_updated_time, time_tag(@issue.updated_on)).html_safe %>.
-        <% end %>
-        </p>
-
+<div class="issue__content">
 <div class="attributes">
 <%= issue_fields_rows do |rows|  
   i = 0
@@ -130,7 +135,6 @@ end %>
   <%= link_to l(:button_quote), quoted_issue_path(@issue), :remote => true, :method => 'post', :class => 'icon icon-comment' if authorize_for('issues', 'edit') %>
   </div>
 
-  <p><strong><%=l(:field_description)%></strong></p>
   <div class="wiki">
   <%= textilizable @issue, :description, :attachments => @issue.attachments %>
   </div>
@@ -167,10 +171,9 @@ end %>
 <%= render :partial => 'changesets', :locals => { :changesets => @changesets} %>
 </div>
 <% end %>
-
+</div>
 <% if @journals.present? %>
 <div id="history">
-<h3><%=l(:label_history)%></h3>
 <%= render :partial => 'history', :locals => { :issue => @issue, :journals => @journals } %>
 </div>
 <% end %>

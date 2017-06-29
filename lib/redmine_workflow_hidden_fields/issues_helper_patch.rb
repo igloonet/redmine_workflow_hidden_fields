@@ -4,6 +4,26 @@ module RedmineWorkflowHiddenFields
 			base.send(:include, InstanceMethods)
 			base.class_eval do
 				unloadable
+
+				def render_issue_tree(issue)
+					s = ''
+					ancestors = issue.root? ? [] : issue.ancestors.visible.to_a
+					ancestors.each do |ancestor|
+						s << '<div>' + content_tag('p', link_to_issue(ancestor, :project => (issue.project_id != ancestor.project_id)))
+					end
+					s.html_safe
+				end
+
+				def render_issue_subject_healine(issue)
+					s = ''
+					subject = h(issue.subject)
+					if issue.is_private?
+						subject = content_tag('span', l(:field_is_private), :class => 'private') + ' ' + subject
+					end
+					s << content_tag('span', subject)
+					s.html_safe
+				end
+
 				alias_method_chain :email_issue_attributes, :hidden
 				alias_method_chain :details_to_strings, :hidden
 			end
