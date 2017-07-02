@@ -63,37 +63,45 @@
   end
   
   unless @issue.disabled_core_fields.include?('category_id') || @issue.hidden_attribute?('category_id')
-    if i % 2 == 0
-		rows.left l(:field_category), h(@issue.category ? @issue.category.name : "-"), :class => 'category'
-	else
-		rows.right l(:field_category), h(@issue.category ? @issue.category.name : "-"), :class => 'category'
-	end
-	i += 1
+		if @issue.category.present?
+			if i % 2 == 0
+				rows.left l(:field_category), h(@issue.category ? @issue.category.name : "-"), :class => 'category'
+			else
+				rows.right l(:field_category), h(@issue.category ? @issue.category.name : "-"), :class => 'category'
+			end
+			i += 1
+		end
   end
   unless @issue.disabled_core_fields.include?('fixed_version_id') || @issue.hidden_attribute?('fixed_version_id')
-	if i % 2 == 0
-		rows.left l(:field_fixed_version), (@issue.fixed_version ? link_to_version(@issue.fixed_version) : "-"), :class => 'fixed-version'
-	else
-		rows.right l(:field_fixed_version), (@issue.fixed_version ? link_to_version(@issue.fixed_version) : "-"), :class => 'fixed-version'
-	end
-	i += 1
+		if @issue.fixed_version.present?
+			if i % 2 == 0
+				rows.left l(:field_fixed_version), (@issue.fixed_version ? link_to_version(@issue.fixed_version) : "-"), :class => 'fixed-version'
+			else
+				rows.right l(:field_fixed_version), (@issue.fixed_version ? link_to_version(@issue.fixed_version) : "-"), :class => 'fixed-version'
+			end
+			i += 1
+		end
   end
 
   unless @issue.disabled_core_fields.include?('start_date') || @issue.hidden_attribute?('start_date')
-    if i % 2 == 0
-      rows.left l(:field_start_date), format_date(@issue.start_date), :class => 'start-date'
-	else
-	  rows.right l(:field_start_date), format_date(@issue.start_date), :class => 'start-date'
-	end
-	i += 1
+		if @issue.start_date.present?
+			if i % 2 == 0
+					rows.left l(:field_start_date), format_date(@issue.start_date), :class => 'start-date'
+			else
+				rows.right l(:field_start_date), format_date(@issue.start_date), :class => 'start-date'
+			end
+			i += 1
+		end
   end
   unless @issue.disabled_core_fields.include?('due_date') || @issue.hidden_attribute?('due_date')
-    if i % 2 == 0
-      rows.left l(:field_due_date), format_date(@issue.due_date), :class => 'due-date'
-	else
-	  rows.right l(:field_due_date), format_date(@issue.due_date), :class => 'due-date'
-	end
-	i += 1
+		if @issue.due_date.present?
+			if i % 2 == 0
+					rows.left l(:field_due_date), format_date(@issue.due_date), :class => 'due-date'
+			else
+				rows.right l(:field_due_date), format_date(@issue.due_date), :class => 'due-date'
+			end
+			i += 1
+		end
   end
   unless @issue.disabled_core_fields.include?('done_ratio') || @issue.hidden_attribute?('done_ratio')
     if i % 2 == 0
@@ -115,11 +123,13 @@
     end
   end
   if User.current.allowed_to?(:view_time_entries, @project)
-    if i % 2 == 0
-      rows.left l(:label_spent_time), (@issue.total_spent_hours > 0 ? link_to(l_hours(@issue.total_spent_hours), issue_time_entries_path(@issue)) : "-"), :class => 'spent-time'
-	else
-	  rows.right l(:label_spent_time), (@issue.total_spent_hours > 0 ? link_to(l_hours(@issue.total_spent_hours), issue_time_entries_path(@issue)) : "-"), :class => 'spent-time'
-	end	
+		if @issue.total_spent_hours > 0
+			if i % 2 == 0
+					rows.left l(:label_spent_time), (@issue.total_spent_hours > 0 ? link_to(l_hours(@issue.total_spent_hours), issue_time_entries_path(@issue)) : "-"), :class => 'spent-time'
+			else
+				rows.right l(:label_spent_time), (@issue.total_spent_hours > 0 ? link_to(l_hours(@issue.total_spent_hours), issue_time_entries_path(@issue)) : "-"), :class => 'spent-time'
+			end
+		end
   end
 end %>
 <%= render_custom_fields_rows(@issue) %>
