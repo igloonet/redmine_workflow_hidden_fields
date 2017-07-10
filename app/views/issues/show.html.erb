@@ -174,12 +174,6 @@ end %>
 
 </div>
 
-<% if @changesets.present? %>
-<div id="issue-changesets">
-<h3><%=l(:label_associated_revisions)%></h3>
-<%= render :partial => 'changesets', :locals => { :changesets => @changesets} %>
-</div>
-<% end %>
 </div>
 <% if @journals.present? %>
 <div id="history">
@@ -215,6 +209,12 @@ end %>
       <%= render :partial => 'watchers/watchers', :locals => {:watched => @issue} %>
     </div>
   <% end %>
+	<% if @changesets.present? %>
+			<div id="issue-changesets">
+				<h3><%=l(:label_associated_revisions)%></h3>
+				<%= render :partial => 'changesets', :locals => { :changesets => @changesets} %>
+			</div>
+	<% end %>
 <% end %>
 
 <% content_for :header_tags do %>
