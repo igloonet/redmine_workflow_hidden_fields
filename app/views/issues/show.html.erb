@@ -5,26 +5,31 @@
 
 
 <div class="<%= @issue.css_classes %> details">
-	<%= render :partial => 'action_menu' %>
-  <% if @prev_issue_id || @next_issue_id %>
-    <div class="next-prev-links contextual">
-      <%= link_to_if @prev_issue_id,
-                     "\xc2\xab #{l(:label_previous)}",
-                     (@prev_issue_id ? issue_path(@prev_issue_id) : nil),
-                     :title => "##{@prev_issue_id}",
-                     :accesskey => accesskey(:previous) %> |
-      <% if @issue_position && @issue_count %>
-        <span class="position"><%= l(:label_item_position, :position => @issue_position, :count => @issue_count) %></span> |
-      <% end %>
-      <%= link_to_if @next_issue_id,
-                     "#{l(:label_next)} \xc2\xbb",
-                     (@next_issue_id ? issue_path(@next_issue_id) : nil),
-                     :title => "##{@next_issue_id}",
-                     :accesskey => accesskey(:next) %>
-    </div>
-  <% end %>
 
 <div class="issue__topbar">
+	<div class="issue__topbar__action-menu">
+		<% if @prev_issue_id || @next_issue_id %>
+				<div class="issue__topbar__paginator">
+					<div class="next-prev-links contextual">
+						<%= link_to_if @prev_issue_id,
+													 "\xc2\xab #{l(:label_previous)}",
+													 (@prev_issue_id ? issue_path(@prev_issue_id) : nil),
+													 :title => "##{@prev_issue_id}",
+													 :accesskey => accesskey(:previous) %> |
+						<% if @issue_position && @issue_count %>
+								<span class="position"><%= l(:label_item_position, :position => @issue_position, :count => @issue_count) %></span> |
+						<% end %>
+						<%= link_to_if @next_issue_id,
+													 "#{l(:label_next)} \xc2\xbb",
+													 (@next_issue_id ? issue_path(@next_issue_id) : nil),
+													 :title => "##{@next_issue_id}",
+													 :accesskey => accesskey(:next) %>
+					</div>
+				</div>
+		<% end %>
+
+		<%= render :partial => 'action_menu' %>
+	</div>
   <%= avatar(@issue.author, :size => "80") %>
 
   <h2><b><%= issue_heading(@issue) %></b> <%= render_issue_subject_healine(@issue) %></h2>
@@ -35,6 +40,22 @@
   <%= l(:label_updated_time, time_tag(@issue.updated_on)).html_safe %>.
   <% end %>
   </p>
+	<div class="issue__progress-bar">
+		<svg class="issue__progress-bar__circle" width="100" height="100" viewBox="0 0 100 100">
+			<defs>
+				<linearGradient id="gradient">
+					<stop offset="5%" stop-color="#e87722" />
+					<stop offset="95%" stop-color="#FFC338" />
+				</linearGradient>
+			</defs>
+			<circle cx="50" cy="50" r="36" fill="none" stroke="#e6e6e6" stroke-width="6" />
+			<%= progress_done_ratio = 226.19448*(1-@issue.done_ratio*0.01) %>
+			<circle cx="50" cy="50" r="36" fill="none" stroke="url(#gradient)" stroke-width="6" stroke-dasharray="226,19448" stroke-dashoffset="<%= progress_done_ratio %>"/>
+		</svg>
+		<div class="issue__progress-bar--text">
+			<%= "#{@issue.done_ratio} %" %>
+		</div>
+	</div>
 </div>
 <div class="issue__content">
 <div class="attributes">
@@ -103,14 +124,16 @@
 			i += 1
 		end
   end
-  unless @issue.disabled_core_fields.include?('done_ratio') || @issue.hidden_attribute?('done_ratio')
-    if i % 2 == 0
-      rows.left l(:field_done_ratio), progress_bar(@issue.done_ratio, :width => '80px', :legend => "#{@issue.done_ratio}%"), :class => 'progress'
-	else
-	  rows.right l(:field_done_ratio), progress_bar(@issue.done_ratio, :width => '80px', :legend => "#{@issue.done_ratio}%"), :class => 'progress'
+	if false
+		unless @issue.disabled_core_fields.include?('done_ratio') || @issue.hidden_attribute?('done_ratio')
+			if i % 2 == 0
+				rows.left l(:field_done_ratio), progress_bar(@issue.done_ratio, :width => '80px', :legend => "#{@issue.done_ratio}%"), :class => 'progress'
+		else
+			rows.right l(:field_done_ratio), progress_bar(@issue.done_ratio, :width => '80px', :legend => "#{@issue.done_ratio}%"), :class => 'progress'
+		end
+		i += 1
+		end
 	end
-	i += 1
-  end
   
   unless @issue.disabled_core_fields.include?('estimated_hours') || @issue.hidden_attribute?('estimated_hours')
     unless @issue.estimated_hours.nil?
