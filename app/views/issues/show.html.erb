@@ -48,7 +48,7 @@
 					<stop offset="95%" stop-color="#FFC338" />
 				</linearGradient>
 			</defs>
-			<circle cx="50" cy="50" r="36" fill="none" stroke="#e6e6e6" stroke-width="6" />
+			<circle cx="50" cy="50" r="36" fill="none" stroke="rgba(255, 255, 255, 0.1)" stroke-width="6" />
 			<%= progress_done_ratio = 226.19448*(1-@issue.done_ratio*0.01) %>
 			<circle cx="50" cy="50" r="36" fill="none" stroke="url(#gradient)" stroke-width="6" stroke-dasharray="226,19448" stroke-dashoffset="<%= progress_done_ratio %>"/>
 		</svg>
