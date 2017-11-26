@@ -259,6 +259,10 @@ module RedmineWorkflowHiddenFields
 								format_date(value)
 							elsif value.is_a?(Time)
 								format_time(value)
+              elsif value.respond_to?(:map)
+                # If a value is mappable then we need each of it's elements
+                # string representation
+                value.map(&:to_s).compact.join(',')
 							else
 								value
 							end
