@@ -26,10 +26,27 @@ module RedmineWorkflowHiddenFields
 
 				alias_method_chain :email_issue_attributes, :hidden
 				alias_method_chain :details_to_strings, :hidden
+				alias_method_chain :render_custom_fields_rows, :hidden
 			end
 		end
 
 		module InstanceMethods
+
+      # Řeší nezobrazování custom polí, pokud nemají zadané žádné hodnoty
+      # přidán pouze řádek next if
+      def render_custom_fields_rows_with_hidden(issue)
+        values = issue.visible_custom_field_values
+        return if values.empty?
+        half = (values.size / 2.0).ceil
+        issue_fields_rows do |rows|
+          values.each_with_index do |value, i|
+            next if show_value(value).empty?
+            css = "cf_#{value.custom_field.id}"
+            m = (i < half ? :left : :right)
+            rows.send m, custom_field_name_tag(value.custom_field), show_value(value), :class => css
+          end
+        end
+      end
 
 			def email_issue_attributes_with_hidden(issue, user)
 				items = []
