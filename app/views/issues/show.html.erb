@@ -59,6 +59,7 @@
 </div>
 <div class="issue__content">
 <div class="attributes">
+    <div id="issue-attributes">
 <%= issue_fields_rows do |rows|  
   i = 0
   unless @issue.hidden_attribute?('status')
@@ -156,7 +157,10 @@
   end
 end %>
 <%= render_custom_fields_rows(@issue) %>
-<%= call_hook(:view_issues_show_details_bottom, :issue => @issue) %>
+    </div>
+    <div id="issue-states">
+        <%= call_hook(:view_issues_show_details_bottom, :issue => @issue) %>
+    </div>
 </div>
 
 <% if @issue.description? || @issue.attachments.any? -%>
