@@ -40,7 +40,7 @@ module RedmineWorkflowHiddenFields
         half = (values.size / 2.0).ceil
         issue_fields_rows do |rows|
           values.each_with_index do |value, i|
-            next if show_value(value).empty?
+            next if (show_value(value).nil? || show_value(value).empty?)
             css = "cf_#{value.custom_field.id}"
             m = (i < half ? :left : :right)
             rows.send m, custom_field_name_tag(value.custom_field), show_value(value), :class => css
